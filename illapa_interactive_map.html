@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_fc592bdadd8f1b795223253a7ac4761e {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+<div style="position:fixed;bottom:30px;left:30px;z-index:1000;
+            background:rgba(10,10,26,0.92);padding:14px 18px;
+            border-radius:8px;border:1px solid #333;color:white;font-size:12px">
+  <b>⚡ ILLAPA — Evacuation Legend</b><br><br>
+  <span style="color:#ff4444">▲</span> High-risk zone (El Niño flood area)<br>
+  <span style="color:#44ff88">★</span> Safe shelter<br>
+  <span style="color:#00ccff">━</span> Dijkstra Route 1<br>
+  <span style="color:#ff00ff">━</span> Dijkstra Route 2<br>
+  <span style="color:#ffff00">━</span> Dijkstra Route 3<br><br>
+  <span style="font-size:10px;color:#888">© OpenStreetMap contributors (ODbL)</span>
+</div>
+    
+            <div class="folium-map" id="map_fc592bdadd8f1b795223253a7ac4761e" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_fc592bdadd8f1b795223253a7ac4761e = L.map(
+                "map_fc592bdadd8f1b795223253a7ac4761e",
+                {
+                    center: [-6.7714, -79.8409],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 14,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_38cb0d38e5ad711a8651e9afa86cf9bc = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u00a9 \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors (ODbL)",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_38cb0d38e5ad711a8651e9afa86cf9bc.addTo(map_fc592bdadd8f1b795223253a7ac4761e);
+        
+    
+            var poly_line_4e9a477043bad9ce125fdf54cb2ae858 = L.polyline(
+                [[-6.8712, -79.8793], [-6.75912, -79.85543], [-6.7719, -79.8389], [-6.7658, -79.841], [-6.768333, -79.860833]],
+                {"bubblingMouseEvents": true, "color": "#00ccff", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#00ccff", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.9, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_fc592bdadd8f1b795223253a7ac4761e);
+        
+    
+        var popup_845eb017f39a40f238765ee8a54d5c35 = L.popup({
+  "maxWidth": 280,
+});
+
+        
+            
+                var html_03549aa0d63c35ed2fcb7b65be8da4cf = $(`<div id="html_03549aa0d63c35ed2fcb7b65be8da4cf" style="width: 100.0%; height: 100.0%;"><b>⚡ ILLAPA Optimal Route</b><br>From: Sector Rio Reque<br>To: Estadio Elias Aguirre<br>Path: Sector Rio Reque → Urb. Campodónico → Centro Civico → Av. Balta → Estadio Elias Aguirre<br>Risk score: 14 (lower = safer)</div>`)[0];
+                popup_845eb017f39a40f238765ee8a54d5c35.setContent(html_03549aa0d63c35ed2fcb7b65be8da4cf);
+            
+        
+
+        poly_line_4e9a477043bad9ce125fdf54cb2ae858.bindPopup(popup_845eb017f39a40f238765ee8a54d5c35)
+        ;
+
+        
+    
+    
+            poly_line_4e9a477043bad9ce125fdf54cb2ae858.bindTooltip(
+                `<div>
+                     Dijkstra: Sector Rio Reque → Estadio Elias Aguirre | Risk score: 14
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_4d891c4e57158f1a1891e94f02963d3e = L.polyline(
+                [[-6.81873, -79.86742], [-6.7658, -79.841], [-6.768333, -79.860833]],
+                {"bubblingMouseEvents": true, "color": "#ff00ff", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#ff00ff", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.9, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_fc592bdadd8f1b795223253a7ac4761e);
+        
+    
+        var popup_6f0763ad850d4f710d8ffe6ae05e6655 = L.popup({
+  "maxWidth": 280,
+});
+
+        
+            
+                var html_c225ed1653a8e08077a4ed40cf9e5511 = $(`<div id="html_c225ed1653a8e08077a4ed40cf9e5511" style="width: 100.0%; height: 100.0%;"><b>⚡ ILLAPA Optimal Route</b><br>From: Villa El Salvador<br>To: Estadio Elias Aguirre<br>Path: Villa El Salvador → Av. Balta → Estadio Elias Aguirre<br>Risk score: 8 (lower = safer)</div>`)[0];
+                popup_6f0763ad850d4f710d8ffe6ae05e6655.setContent(html_c225ed1653a8e08077a4ed40cf9e5511);
+            
+        
+
+        poly_line_4d891c4e57158f1a1891e94f02963d3e.bindPopup(popup_6f0763ad850d4f710d8ffe6ae05e6655)
+        ;
+
+        
+    
+    
+            poly_line_4d891c4e57158f1a1891e94f02963d3e.bindTooltip(
+                `<div>
+                     Dijkstra: Villa El Salvador → Estadio Elias Aguirre | Risk score: 8
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var poly_line_dc807d55f0f28b4d95d76ed7cf202d50 = L.polyline(
+                [[-6.75201, -79.86438], [-6.792528, -79.890944]],
+                {"bubblingMouseEvents": true, "color": "#ffff00", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "#ffff00", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.9, "smoothFactor": 1.0, "stroke": true, "weight": 5}
+            ).addTo(map_fc592bdadd8f1b795223253a7ac4761e);
+        
+    
+        var popup_f196ad665e14087059f76e9a10995816 = L.popup({
+  "maxWidth": 280,
+});
+
+        
+            
+                var html_77ea713e7a3d20362bd99b2e0af96876 = $(`<div id="html_77ea713e7a3d20362bd99b2e0af96876" style="width: 100.0%; height: 100.0%;"><b>⚡ ILLAPA Optimal Route</b><br>From: Pueblo Joven Mochica<br>To: Colegio San Agustin<br>Path: Pueblo Joven Mochica → Colegio San Agustin<br>Risk score: 4 (lower = safer)</div>`)[0];
+                popup_f196ad665e14087059f76e9a10995816.setContent(html_77ea713e7a3d20362bd99b2e0af96876);
+            
+        
+
+        poly_line_dc807d55f0f28b4d95d76ed7cf202d50.bindPopup(popup_f196ad665e14087059f76e9a10995816)
+        ;
+
+        
+    
+    
+            poly_line_dc807d55f0f28b4d95d76ed7cf202d50.bindTooltip(
+                `<div>
+                     Dijkstra: Pueblo Joven Mochica → Colegio San Agustin | Risk score: 4
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_f014cea78eb6ae4d930e8a20ac5fb792 = L.marker(
+                [-6.8712, -79.8793],
+                {
+}
+            ).addTo(map_fc592bdadd8f1b795223253a7ac4761e);
+        
+    
+            var icon_4087cee2c0f81ca5849cab980f2371e5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "exclamation-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1925ae49ae33657d16c120f81dcf6ed6 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_6e9d2450ec9c2809581d5c6ceefb07c8 = $(`<div id="html_6e9d2450ec9c2809581d5c6ceefb07c8" style="width: 100.0%; height: 100.0%;"><b>⚠️ EVACUATION ZONE</b><br>Sector Rio Reque</div>`)[0];
+                popup_1925ae49ae33657d16c120f81dcf6ed6.setContent(html_6e9d2450ec9c2809581d5c6ceefb07c8);
+            
+        
+
+        marker_f014cea78eb6ae4d930e8a20ac5fb792.bindPopup(popup_1925ae49ae33657d16c120f81dcf6ed6)
+        ;
+
+        
+    
+    
+            marker_f014cea78eb6ae4d930e8a20ac5fb792.bindTooltip(
+                `<div>
+                     ⚠️ HIGH RISK: Sector Rio Reque
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_f014cea78eb6ae4d930e8a20ac5fb792.setIcon(icon_4087cee2c0f81ca5849cab980f2371e5);
+            
+    
+            var marker_e68a58a1270ddc5b7408b03d9eea9e33 = L.marker(
+                [-6.81873, -79.86742],
+                {
+}
+            ).addTo(map_fc592bdadd8f1b795223253a7ac4761e);
+        
+    
+            var icon_e41bc215eadfa5611f9a072e216e13af = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "exclamation-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2a4807539f0d5f5d7165914bba4ecdf3 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_11651922811355e5af67073d90e1fb7e = $(`<div id="html_11651922811355e5af67073d90e1fb7e" style="width: 100.0%; height: 100.0%;"><b>⚠️ EVACUATION ZONE</b><br>Villa El Salvador</div>`)[0];
+                popup_2a4807539f0d5f5d7165914bba4ecdf3.setContent(html_11651922811355e5af67073d90e1fb7e);
+            
+        
+
+        marker_e68a58a1270ddc5b7408b03d9eea9e33.bindPopup(popup_2a4807539f0d5f5d7165914bba4ecdf3)
+        ;
+
+        
+    
+    
+            marker_e68a58a1270ddc5b7408b03d9eea9e33.bindTooltip(
+                `<div>
+                     ⚠️ HIGH RISK: Villa El Salvador
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_e68a58a1270ddc5b7408b03d9eea9e33.setIcon(icon_e41bc215eadfa5611f9a072e216e13af);
+            
+    
+            var marker_522d8472fe2da8d6fd8c7b04d274eaf1 = L.marker(
+                [-6.75201, -79.86438],
+                {
+}
+            ).addTo(map_fc592bdadd8f1b795223253a7ac4761e);
+        
+    
+            var icon_fc4d24e2653b123828b82bf954e2d912 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "exclamation-sign",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_20645d8e1d9a38e538bdb9fee3909441 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_5d96596cc54a28d678f271fab0cf2517 = $(`<div id="html_5d96596cc54a28d678f271fab0cf2517" style="width: 100.0%; height: 100.0%;"><b>⚠️ EVACUATION ZONE</b><br>Pueblo Joven Mochica</div>`)[0];
+                popup_20645d8e1d9a38e538bdb9fee3909441.setContent(html_5d96596cc54a28d678f271fab0cf2517);
+            
+        
+
+        marker_522d8472fe2da8d6fd8c7b04d274eaf1.bindPopup(popup_20645d8e1d9a38e538bdb9fee3909441)
+        ;
+
+        
+    
+    
+            marker_522d8472fe2da8d6fd8c7b04d274eaf1.bindTooltip(
+                `<div>
+                     ⚠️ HIGH RISK: Pueblo Joven Mochica
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_522d8472fe2da8d6fd8c7b04d274eaf1.setIcon(icon_fc4d24e2653b123828b82bf954e2d912);
+            
+    
+            var marker_44f20c54bf86d8a40925f54d2c9be4b0 = L.marker(
+                [-6.768333, -79.860833],
+                {
+}
+            ).addTo(map_fc592bdadd8f1b795223253a7ac4761e);
+        
+    
+            var icon_b35580a75a230996f2276c2face94d4b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "home",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_888e810ed6a6b1beef4b41caff4fe614 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_5fc26e27dcae48c3ef10cc0f6379b73f = $(`<div id="html_5fc26e27dcae48c3ef10cc0f6379b73f" style="width: 100.0%; height: 100.0%;"><b>🏠 SAFE SHELTER</b><br>Estadio Elias Aguirre</div>`)[0];
+                popup_888e810ed6a6b1beef4b41caff4fe614.setContent(html_5fc26e27dcae48c3ef10cc0f6379b73f);
+            
+        
+
+        marker_44f20c54bf86d8a40925f54d2c9be4b0.bindPopup(popup_888e810ed6a6b1beef4b41caff4fe614)
+        ;
+
+        
+    
+    
+            marker_44f20c54bf86d8a40925f54d2c9be4b0.bindTooltip(
+                `<div>
+                     🏠 SHELTER: Estadio Elias Aguirre
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_44f20c54bf86d8a40925f54d2c9be4b0.setIcon(icon_b35580a75a230996f2276c2face94d4b);
+            
+    
+            var marker_5a73e050f9fb51ca63e054b456c63a5c = L.marker(
+                [-6.77254, -79.84283],
+                {
+}
+            ).addTo(map_fc592bdadd8f1b795223253a7ac4761e);
+        
+    
+            var icon_99bf8192fc262c9c15a710743617fc6c = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "home",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_3e7590538c0d4c3c508eff36584b8433 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_1641289c84c5f45208b9214ac7b9fb34 = $(`<div id="html_1641289c84c5f45208b9214ac7b9fb34" style="width: 100.0%; height: 100.0%;"><b>🏠 SAFE SHELTER</b><br>Hospital Las Mercedes</div>`)[0];
+                popup_3e7590538c0d4c3c508eff36584b8433.setContent(html_1641289c84c5f45208b9214ac7b9fb34);
+            
+        
+
+        marker_5a73e050f9fb51ca63e054b456c63a5c.bindPopup(popup_3e7590538c0d4c3c508eff36584b8433)
+        ;
+
+        
+    
+    
+            marker_5a73e050f9fb51ca63e054b456c63a5c.bindTooltip(
+                `<div>
+                     🏠 SHELTER: Hospital Las Mercedes
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_5a73e050f9fb51ca63e054b456c63a5c.setIcon(icon_99bf8192fc262c9c15a710743617fc6c);
+            
+    
+            var marker_6aba63f6ceebe460f69b39b60a73580c = L.marker(
+                [-6.7606, -79.8633],
+                {
+}
+            ).addTo(map_fc592bdadd8f1b795223253a7ac4761e);
+        
+    
+            var icon_cbf0f2dda69efd0988aef612d2554700 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "home",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_86471551af8c6ea6ab0cbea7805223f3 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_810e8b1577843cdc0c906a64b188ee0d = $(`<div id="html_810e8b1577843cdc0c906a64b188ee0d" style="width: 100.0%; height: 100.0%;"><b>🏠 SAFE SHELTER</b><br>Universidad USAT</div>`)[0];
+                popup_86471551af8c6ea6ab0cbea7805223f3.setContent(html_810e8b1577843cdc0c906a64b188ee0d);
+            
+        
+
+        marker_6aba63f6ceebe460f69b39b60a73580c.bindPopup(popup_86471551af8c6ea6ab0cbea7805223f3)
+        ;
+
+        
+    
+    
+            marker_6aba63f6ceebe460f69b39b60a73580c.bindTooltip(
+                `<div>
+                     🏠 SHELTER: Universidad USAT
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_6aba63f6ceebe460f69b39b60a73580c.setIcon(icon_cbf0f2dda69efd0988aef612d2554700);
+            
+    
+            var marker_a1bffe0b85e422ca241848feff3ef2f3 = L.marker(
+                [-6.792528, -79.890944],
+                {
+}
+            ).addTo(map_fc592bdadd8f1b795223253a7ac4761e);
+        
+    
+            var icon_6e183db95c7e79465793834fc705b3c4 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "home",
+  "prefix": "glyphicon",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_a17dabcabd5c28ce2e096eb68b2086ce = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_80644c50a54cf1f9b4394b180b6b0953 = $(`<div id="html_80644c50a54cf1f9b4394b180b6b0953" style="width: 100.0%; height: 100.0%;"><b>🏠 SAFE SHELTER</b><br>Colegio San Agustin</div>`)[0];
+                popup_a17dabcabd5c28ce2e096eb68b2086ce.setContent(html_80644c50a54cf1f9b4394b180b6b0953);
+            
+        
+
+        marker_a1bffe0b85e422ca241848feff3ef2f3.bindPopup(popup_a17dabcabd5c28ce2e096eb68b2086ce)
+        ;
+
+        
+    
+    
+            marker_a1bffe0b85e422ca241848feff3ef2f3.bindTooltip(
+                `<div>
+                     🏠 SHELTER: Colegio San Agustin
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_a1bffe0b85e422ca241848feff3ef2f3.setIcon(icon_6e183db95c7e79465793834fc705b3c4);
+            
+</script>
+</html>
